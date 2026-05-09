@@ -1,0 +1,16 @@
+{
+  "name": "pm-preset-bug-triage",
+  "version": "0.1.0",
+  "description": "Strict bug triage pm workspace preset — production incidents, hotfixes, mandatory root-cause metadata",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "@unbrained/pm-cli": ">=2026.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
