@@ -1,4 +1,4 @@
-import { defineExtension } from "@unbrained/pm-cli/sdk";
+import { defineExtension, type CommandHandlerContext } from "@unbrained/pm-cli/sdk";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -107,42 +107,43 @@ const TEMPLATES: Record<string, unknown> = {
 // ─── Extension ───────────────────────────────────────────────────────────────
 
 export default defineExtension({
-  commands: [
-    {
+  activate(api) {
+    api.registerCommand({
       name: "triage-setup",
       description:
         "Apply the bug-triage preset to the current pm workspace (writes settings.json and installs templates)",
       flags: [
         {
-          name: "force",
-          description: "Overwrite existing settings.json without prompting",
+          long: "force",
           type: "boolean",
-          default: false,
+          description: "Overwrite existing settings.json without prompting",
         },
         {
-          name: "dry-run",
+          long: "dry-run",
+          type: "boolean",
           description:
             "Show what would be written without touching the filesystem",
-          type: "boolean",
-          default: false,
         },
         {
-          name: "prefix",
-          description: "Override the id_prefix (default: bug-)",
+          long: "prefix",
           type: "string",
+          description: "Override the id_prefix (default: bug-)",
         },
       ],
-      run({ flags, log, error, warn }) {
-        const pmDir = path.resolve(".agents/pm");
+
+      run(context: CommandHandlerContext) {
+        const { options, pm_root } = context;
+        const cwd = pm_root ?? process.cwd();
+        const pmDir = path.resolve(cwd, ".agents/pm");
         const settingsPath = path.join(pmDir, "settings.json");
         const templatesDir = path.join(pmDir, "templates");
-        const isDryRun = Boolean(flags["dry-run"]);
-        const isForce = Boolean(flags["force"]);
-        const prefixOverride = flags["prefix"] as string | undefined;
+        const isDryRun = Boolean(options["dry-run"]);
+        const isForce = Boolean(options["force"]);
+        const prefixOverride = options["prefix"] as string | undefined;
 
         // 1. Check .agents/pm/ exists
         if (!fs.existsSync(pmDir)) {
-          error(
+          console.error(
             `pm workspace not found. Expected directory: ${pmDir}\n` +
               `Run "pm init" first to initialise a pm workspace in this project.`
           );
@@ -156,38 +157,38 @@ export default defineExtension({
             : SETTINGS;
 
         if (isDryRun) {
-          log("[dry-run] Would write settings.json:");
-          log(JSON.stringify(settings, null, 2));
+          console.log("[dry-run] Would write settings.json:");
+          console.log(JSON.stringify(settings, null, 2));
         } else {
           if (fs.existsSync(settingsPath) && !isForce) {
-            warn(
+            console.warn(
               `settings.json already exists at ${settingsPath}. ` +
                 `Use --force to overwrite.`
             );
           } else {
             if (fs.existsSync(settingsPath) && isForce) {
-              warn(`Overwriting existing settings.json (--force)`);
+              console.warn(`Overwriting existing settings.json (--force)`);
             }
             fs.writeFileSync(
               settingsPath,
               JSON.stringify(settings, null, 2) + "\n",
               "utf8"
             );
-            log(`Wrote settings.json → ${settingsPath}`);
+            console.log(`Wrote settings.json → ${settingsPath}`);
           }
         }
 
         // 3. Create templates directory and write template files
         if (isDryRun) {
-          log(`[dry-run] Would create directory: ${templatesDir}`);
+          console.log(`[dry-run] Would create directory: ${templatesDir}`);
           for (const [filename, template] of Object.entries(TEMPLATES)) {
-            log(`[dry-run] Would write template: ${path.join(templatesDir, filename)}`);
-            log(JSON.stringify(template, null, 2));
+            console.log(`[dry-run] Would write template: ${path.join(templatesDir, filename)}`);
+            console.log(JSON.stringify(template, null, 2));
           }
         } else {
           if (!fs.existsSync(templatesDir)) {
             fs.mkdirSync(templatesDir, { recursive: true });
-            log(`Created templates directory → ${templatesDir}`);
+            console.log(`Created templates directory → ${templatesDir}`);
           }
 
           for (const [filename, template] of Object.entries(TEMPLATES)) {
@@ -197,33 +198,33 @@ export default defineExtension({
               JSON.stringify(template, null, 2) + "\n",
               "utf8"
             );
-            log(`Wrote template → ${templatePath}`);
+            console.log(`Wrote template → ${templatePath}`);
           }
         }
 
         // 4. Print next steps
-        log("");
-        log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        log("  Bug triage preset applied. Next steps:");
-        log("");
-        log("  Create a new production incident:");
-        log("    pm create --template incident");
-        log("");
-        log("  Create a hotfix task (linked to an incident):");
-        log("    pm create --template hotfix-task");
-        log("");
-        log("  Track a regression:");
-        log("    pm create --template regression");
-        log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        log("");
+        console.log("");
+        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        console.log("  Bug triage preset applied. Next steps:");
+        console.log("");
+        console.log("  Create a new production incident:");
+        console.log("    pm create --template incident");
+        console.log("");
+        console.log("  Create a hotfix task (linked to an incident):");
+        console.log("    pm create --template hotfix-task");
+        console.log("");
+        console.log("  Track a regression:");
+        console.log("    pm create --template regression");
+        console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        console.log("");
 
         // 5. Strict governance warning
-        warn(
+        console.warn(
           "STRICT GOVERNANCE ACTIVE: All close operations require " +
             "'root_cause' and 'resolution' metadata fields to be set. " +
             "Items cannot be closed without this information."
         );
       },
-    },
-  ],
+    });
+  },
 });
