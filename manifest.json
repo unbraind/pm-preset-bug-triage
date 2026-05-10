@@ -4,6 +4,7 @@
   "description": "Strict bug triage pm workspace preset \u2014 production incidents, hotfixes, mandatory root-cause metadata",
   "entry": "./dist/index.js",
   "capabilities": [
-    "commands"
+    "commands",
+    "schema"
   ]
 }
