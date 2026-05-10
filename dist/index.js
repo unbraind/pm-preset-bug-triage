@@ -1,4 +1,4 @@
-import { defineExtension } from "@unbrained/pm-cli/sdk";
+function defineExtension(m){return m}
 import * as fs from "node:fs";
 import * as path from "node:path";
 // ─── Settings ────────────────────────────────────────────────────────────────
