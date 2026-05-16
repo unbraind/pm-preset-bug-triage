@@ -1,6 +1,6 @@
-function defineExtension(m){return m}
 import * as fs from "node:fs";
 import * as path from "node:path";
+const defineExtension = ((extension) => extension);
 // ─── Settings ────────────────────────────────────────────────────────────────
 const SETTINGS = {
     id_prefix: "bug-",
