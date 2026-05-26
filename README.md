@@ -9,7 +9,7 @@ Configures your workspace for production incident tracking with mandatory root-c
 ## Install
 
 ```bash
-pm extension install github.com/unbraind/pm-preset-bug-triage --project
+pm install github.com/unbraind/pm-preset-bug-triage
 ```
 
 The `--project` flag scopes the extension to the current workspace only.
@@ -177,3 +177,7 @@ A typical flow using this preset:
 ## License
 
 MIT
+
+## Release Automation
+
+This package is release-ready for GitHub, npm, and Bun-compatible installs. CI runs type checking, build, production dependency audit, package packing, Bun install verification, and pm-changelog validation. The daily release workflow publishes only when commits exist after the latest release tag and uses pm-changelog to generate CHANGELOG.md and GitHub release notes.
