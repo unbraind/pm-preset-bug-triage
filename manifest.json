@@ -1,6 +1,6 @@
 {
   "name": "pm-preset-bug-triage",
-  "version": "0.1.0",
+  "version": "2026.5.26",
   "description": "Strict bug triage pm workspace preset — production incidents, hotfixes, mandatory root-cause metadata",
   "author": "@unbraind",
   "entry": "./dist/index.js",
