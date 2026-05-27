@@ -1,12 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add publish retry + provenance fallback to release workflow ([pm-preset-bug-triage-d1l2](https://github.com/unbraind/pm-preset-bug-triage/blob/main/.agents/pm/tasks/pm-preset-bug-triage-d1l2.toon))
+
 ## 2026.05.27 - 2026-05-27
 
 ### Added
 
 - Add bun-install verification to release workflow ([pm-preset-bug-triage-222s](https://github.com/unbraind/pm-preset-bug-triage/blob/main/.agents/pm/tasks/pm-preset-bug-triage-222s.toon))
-
-## 2026.05.26 - 2026-05-26
 
 ### Fixed
 
