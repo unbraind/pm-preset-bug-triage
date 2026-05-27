@@ -12,6 +12,8 @@
 
 - Add bun-install verification to release workflow ([pm-preset-bug-triage-222s](https://github.com/unbraind/pm-preset-bug-triage/blob/main/.agents/pm/tasks/pm-preset-bug-triage-222s.toon))
 
+## 2026.05.26 - 2026-05-26
+
 ### Fixed
 
 - ci: fix release workflow step ordering ([pm-preset-bug-triage-oynt](https://github.com/unbraind/pm-preset-bug-triage/blob/main/.agents/pm/tasks/pm-preset-bug-triage-oynt.toon))
