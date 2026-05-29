@@ -1,6 +1,6 @@
 {
   "name": "pm-preset-bug-triage",
-  "version": "2026.5.28",
+  "version": "2026.5.29",
   "description": "Strict bug triage pm workspace preset — production incidents, hotfixes, mandatory root-cause metadata",
   "repository": {
     "type": "git",
